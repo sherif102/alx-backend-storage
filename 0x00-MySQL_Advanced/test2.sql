@@ -1,14 +1,18 @@
--- Show users and update (or not) email
-SELECT * FROM users;
+INSERT INTO users (name) VALUES ("Bob");
+SET @user_bob = LAST_INSERT_ID();
 
-UPDATE users SET valid_email = 1 WHERE email = "bob@dylan.com";
-UPDATE users SET email = "sylvie+new@dylan.com" WHERE email = "sylvie@dylan.com";
-UPDATE users SET name = "Jannis" WHERE email = "jeanne@dylan.com";
+INSERT INTO users (name) VALUES ("Jeanne");
+SET @user_jeanne = LAST_INSERT_ID();
 
-SELECT "--";
-SELECT * FROM users;
+INSERT INTO projects (name) VALUES ("C is fun");
+SET @project_c = LAST_INSERT_ID();
 
-UPDATE users SET email = "bob@dylan.com" WHERE email = "bob@dylan.com";
+INSERT INTO projects (name) VALUES ("Python is cool");
+SET @project_py = LAST_INSERT_ID();
 
-SELECT "--";
-SELECT * FROM users;
+
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_c, 80);
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_py, 96);
+
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_c, 91);
+INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_py, 73);
