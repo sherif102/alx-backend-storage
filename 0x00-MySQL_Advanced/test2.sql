@@ -1,46 +1,30 @@
--- Initial
-DROP TABLE IF EXISTS corrections;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS projects;
+-- Test view
+SELECT * FROM need_meeting;
 
-CREATE TABLE IF NOT EXISTS users (
-    id int not null AUTO_INCREMENT,
-    name varchar(255) not null,
-    average_score float default 0,
-    PRIMARY KEY (id)
-);
+SELECT "--";
 
-CREATE TABLE IF NOT EXISTS projects (
-    id int not null AUTO_INCREMENT,
-    name varchar(255) not null,
-    PRIMARY KEY (id)
-);
+UPDATE students SET score = 40 WHERE name = 'Bob';
+SELECT * FROM need_meeting;
 
-CREATE TABLE IF NOT EXISTS corrections (
-    user_id int not null,
-    project_id int not null,
-    score int default 0,
-    KEY `user_id` (`user_id`),
-    KEY `project_id` (`project_id`),
-    CONSTRAINT fk_user_id FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-    CONSTRAINT fk_project_id FOREIGN KEY (`project_id`) REFERENCES `projects` (`id`) ON DELETE CASCADE
-);
+SELECT "--";
 
-INSERT INTO users (name) VALUES ("Bob");
-SET @user_bob = LAST_INSERT_ID();
+UPDATE students SET score = 80 WHERE name = 'Steeve';
+SELECT * FROM need_meeting;
 
-INSERT INTO users (name) VALUES ("Jeanne");
-SET @user_jeanne = LAST_INSERT_ID();
+SELECT "--";
 
-INSERT INTO projects (name) VALUES ("C is fun");
-SET @project_c = LAST_INSERT_ID();
+UPDATE students SET last_meeting = CURDATE() WHERE name = 'Jean';
+SELECT * FROM need_meeting;
 
-INSERT INTO projects (name) VALUES ("Python is cool");
-SET @project_py = LAST_INSERT_ID();
+SELECT "--";
 
+UPDATE students SET last_meeting = ADDDATE(CURDATE(), INTERVAL -2 MONTH) WHERE name = 'Jean';
+SELECT * FROM need_meeting;
 
-INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_c, 80);
-INSERT INTO corrections (user_id, project_id, score) VALUES (@user_bob, @project_py, 96);
+SELECT "--";
 
-INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_c, 91);
-INSERT INTO corrections (user_id, project_id, score) VALUES (@user_jeanne, @project_py, 73);
+SHOW CREATE TABLE need_meeting;
+
+SELECT "--";
+
+SHOW CREATE TABLE students;
